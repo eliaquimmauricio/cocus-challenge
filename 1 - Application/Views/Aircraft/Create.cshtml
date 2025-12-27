@@ -13,6 +13,13 @@
 
     <form asp-action="Create" asp-controller="Aircraft" method="post">
         @Html.AntiForgeryToken()
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-error mb-16">
+                <div asp-validation-summary="ModelOnly" class="text-error"></div>
+            </div>
+        }
         
         <div class="form-grid">
             <div class="form-group">
