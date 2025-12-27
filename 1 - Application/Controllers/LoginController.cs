@@ -9,7 +9,6 @@ namespace Cocus.Mvc.Controllers
     {
         public IActionResult Index()
         {
-            // Se o usuário já estiver autenticado, redireciona para Home
             if (User.Identity?.IsAuthenticated == true)
             {
                 return RedirectToAction("Index", "Home");
@@ -36,7 +35,6 @@ namespace Cocus.Mvc.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Redireciona para a URL de retorno ou Home
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             {
                 return Redirect(returnUrl);

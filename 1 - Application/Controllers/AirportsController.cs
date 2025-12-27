@@ -15,14 +15,12 @@ public class AirportsController : Controller
 		_airportService = airportService;
 	}
 
-	// GET: Airports
 	public async Task<IActionResult> Index()
 	{
 		var airports = await _airportService.GetAllAsync();
 		return View(airports);
 	}
 
-	// GET: Airports/Details/5
 	public async Task<IActionResult> Details(int? id)
 	{
 		if (id == null)
@@ -39,13 +37,11 @@ public class AirportsController : Controller
 		return View(airport);
 	}
 
-	// GET: Airports/Create
 	public IActionResult Create()
 	{
 		return View();
 	}
 
-	// POST: Airports/Create
 	[HttpPost]
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Create(AirportDto airportDto)
@@ -73,7 +69,6 @@ public class AirportsController : Controller
 		return View(airportDto);
 	}
 
-	// GET: Airports/Edit/5
 	public async Task<IActionResult> Edit(int? id)
 	{
 		if (id == null)
@@ -89,7 +84,6 @@ public class AirportsController : Controller
 		return View(airport);
 	}
 
-	// POST: Airports/Edit/5
 	[HttpPost]
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Edit(int id, AirportDto airportDto)
@@ -122,7 +116,6 @@ public class AirportsController : Controller
 		return View(airportDto);
 	}
 
-	// GET: Airports/Delete/5
 	public async Task<IActionResult> Delete(int? id)
 	{
 		if (id == null)
@@ -139,7 +132,6 @@ public class AirportsController : Controller
 		return View(airport);
 	}
 
-	// POST: Airports/Delete/5
 	[HttpPost, ActionName("Delete")]
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> DeleteConfirmed(int id)

@@ -15,14 +15,12 @@ public class AircraftController : Controller
 		_aircraftService = aircraftService;
 	}
 
-	// GET: Aircraft
 	public async Task<IActionResult> Index()
 	{
 		var aircraft = await _aircraftService.GetAllAsync();
 		return View(aircraft);
 	}
 
-	// GET: Aircraft/Details/5
 	public async Task<IActionResult> Details(int? id)
 	{
 		if (id == null)
@@ -39,13 +37,11 @@ public class AircraftController : Controller
 		return View(aircraft);
 	}
 
-	// GET: Aircraft/Create
 	public IActionResult Create()
 	{
 		return View();
 	}
 
-	// POST: Aircraft/Create
 	[HttpPost]
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Create(AircraftDto aircraftDto)
@@ -73,7 +69,6 @@ public class AircraftController : Controller
 		return View(aircraftDto);
 	}
 
-	// GET: Aircraft/Edit/5
 	public async Task<IActionResult> Edit(int? id)
 	{
 		if (id == null)
@@ -89,7 +84,6 @@ public class AircraftController : Controller
 		return View(aircraft);
 	}
 
-	// POST: Aircraft/Edit/5
 	[HttpPost]
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Edit(int id, AircraftDto aircraftDto)
@@ -122,7 +116,6 @@ public class AircraftController : Controller
 		return View(aircraftDto);
 	}
 
-	// GET: Aircraft/Delete/5
 	public async Task<IActionResult> Delete(int? id)
 	{
 		if (id == null)
@@ -139,7 +132,6 @@ public class AircraftController : Controller
 		return View(aircraft);
 	}
 
-	// POST: Aircraft/Delete/5
 	[HttpPost, ActionName("Delete")]
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> DeleteConfirmed(int id)

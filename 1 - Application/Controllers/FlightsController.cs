@@ -16,14 +16,12 @@ public class FlightsController : Controller
 		_flightService = flightService;
 	}
 
-	// GET: Flights
 	public async Task<IActionResult> Index()
 	{
 		var flights = await _flightService.GetAllAsync();
 		return View(flights);
 	}
 
-	// GET: Flights/Details/5
 	public async Task<IActionResult> Details(int? id)
 	{
 		if (id == null)
@@ -40,7 +38,6 @@ public class FlightsController : Controller
 		return View(flight);
 	}
 
-	// GET: Flights/Create
 	public async Task<IActionResult> Create()
 	{
 		var formData = await _flightService.GetFlightFormDataAsync();
@@ -48,7 +45,6 @@ public class FlightsController : Controller
 		return View(new FlightDto { ScheduledDeparture = DateTime.Now.AddDays(1) });
 	}
 
-	// POST: Flights/Create
 	[HttpPost]
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Create(FlightDto flightDto)
@@ -78,7 +74,6 @@ public class FlightsController : Controller
 		return View(flightDto);
 	}
 
-	// GET: Flights/Edit/5
 	public async Task<IActionResult> Edit(int? id)
 	{
 		if (id == null)
@@ -97,7 +92,6 @@ public class FlightsController : Controller
 		return View(flight);
 	}
 
-	// POST: Flights/Edit/5
 	[HttpPost]
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> Edit(int id, FlightDto flightDto)
@@ -132,7 +126,6 @@ public class FlightsController : Controller
 		return View(flightDto);
 	}
 
-	// GET: Flights/Delete/5
 	public async Task<IActionResult> Delete(int? id)
 	{
 		if (id == null)
@@ -149,7 +142,6 @@ public class FlightsController : Controller
 		return View(flight);
 	}
 
-	// POST: Flights/Delete/5
 	[HttpPost, ActionName("Delete")]
 	[ValidateAntiForgeryToken]
 	public async Task<IActionResult> DeleteConfirmed(int id)

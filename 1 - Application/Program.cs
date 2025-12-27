@@ -43,6 +43,12 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+	var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+	dbContext.Database.Migrate();
+}
+
 if (!app.Environment.IsDevelopment())
 {
 	app.UseExceptionHandler("/Home/Error");
@@ -61,6 +67,5 @@ app.MapControllerRoute(
 	name: "default",
 	pattern: "{controller=Login}/{action=Index}/{id?}")
 	.WithStaticAssets();
-
 
 app.Run();
