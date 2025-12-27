@@ -1,0 +1,50 @@
+@model Cocus.Domain.DTOs.AircraftDto
+
+@{
+    ViewData["Title"] = "Delete Aircraft";
+}
+
+<div class="md-card ">
+    <div class="card-header">
+        <p class="md-typescale-title-large on-error-container">
+            Are you sure you want to delete this aircraft?
+        </p>
+    </div>
+    
+    <div class="card-body bg-surface">
+        <dl class="details-list">
+            <dt>Registration Number:</dt>
+            <dd><strong>@Model.RegistrationNumber</strong></dd>
+
+            <dt>Aircraft:</dt>
+            <dd>@Model.Manufacturer @Model.Model</dd>
+
+            <dt>Fuel Consumption:</dt>
+            <dd>@Model.FuelConsumptionPerKm.ToString("F2") L/km</dd>
+
+            <dt>Takeoff Fuel Effort:</dt>
+            <dd>@Model.TakeoffFuelEffort.ToString("N0") L</dd>
+
+            <dt>Maximum Range:</dt>
+            <dd>@Model.MaxRangeKm.ToString("N0") km</dd>
+
+            <dt>Cruise Speed:</dt>
+            <dd>@Model.CruiseSpeedKmh.ToString("N0") km/h</dd>
+
+            <dt>Created:</dt>
+            <dd>@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+        </dl>
+    </div>
+
+    <form asp-action="Delete" method="post" class="card-footer bg-surface">
+        <input type="hidden" asp-for="Id" />
+        <div class="flex flex-gap-16">
+            <md-filled-button onclick="this.closest('form').submit()">
+                Confirm Delete
+            </md-filled-button>
+            <md-outlined-button type="button" onclick="window.location.href='@Url.Action("Index")'">
+                Cancel
+            </md-outlined-button>
+        </div>
+    </form>
+</div>

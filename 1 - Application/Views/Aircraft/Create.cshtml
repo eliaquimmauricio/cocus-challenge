@@ -1,0 +1,92 @@
+@model Cocus.Domain.DTOs.AircraftDto
+
+@{
+    ViewData["Title"] = "Create Aircraft";
+}
+
+<div class="md-card form-container">
+    <div class="page-header">
+        <h1>
+            Create New Aircraft
+        </h1>
+    </div>
+
+    <form asp-action="Create" asp-controller="Aircraft" method="post">
+        @Html.AntiForgeryToken()
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label asp-for="Model" class="md-typescale-body-large form-label">
+                    Model
+                </label>
+                <input asp-for="Model" class="md-typescale-body-medium form-input" placeholder="e.g., Boeing 737" />
+                <span asp-validation-for="Model" class="form-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Manufacturer" class="md-typescale-body-large form-label">
+                    Manufacturer
+                </label>
+                <input asp-for="Manufacturer" class="md-typescale-body-medium form-input" placeholder="e.g., Boeing" />
+                <span asp-validation-for="Manufacturer" class="form-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="RegistrationNumber" class="md-typescale-body-large form-label">
+                    Registration Number
+                </label>
+                <input asp-for="RegistrationNumber" class="md-typescale-body-medium form-input" placeholder="e.g., N12345" />
+                <span asp-validation-for="RegistrationNumber" class="form-error"></span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="FuelConsumptionPerKm" class="md-typescale-body-large form-label">
+                        Fuel Consumption Per Km (L/km)
+                    </label>
+                    <input asp-for="FuelConsumptionPerKm" type="number" step="0.01" class="md-typescale-body-medium form-input" />
+                    <span asp-validation-for="FuelConsumptionPerKm" class="form-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="TakeoffFuelEffort" class="md-typescale-body-large form-label">
+                        Takeoff Fuel Effort (L)
+                    </label>
+                    <input asp-for="TakeoffFuelEffort" type="number" step="0.01" class="md-typescale-body-medium form-input" />
+                    <span asp-validation-for="TakeoffFuelEffort" class="form-error"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="MaxRangeKm" class="md-typescale-body-large form-label">
+                        Maximum Range (km)
+                    </label>
+                    <input asp-for="MaxRangeKm" type="number" step="0.01" class="md-typescale-body-medium form-input" />
+                    <span asp-validation-for="MaxRangeKm" class="form-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CruiseSpeedKmh" class="md-typescale-body-large form-label">
+                        Cruise Speed (km/h)
+                    </label>
+                    <input asp-for="CruiseSpeedKmh" type="number" step="0.01" class="md-typescale-body-medium form-input" />
+                    <span asp-validation-for="CruiseSpeedKmh" class="form-error"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <md-filled-button type="button" onclick="this.closest('form').submit()">
+                Create Aircraft
+            </md-filled-button>
+            <md-outlined-button type="button" onclick="window.location.href='@Url.Action("Index")'">
+                Cancel
+            </md-outlined-button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,16 @@
+@model (string EditUrl, string DeleteUrl)
+
+<div class="table-actions">
+    @if (!string.IsNullOrEmpty(Model.EditUrl))
+    {
+        <md-text-button title="Edit" onclick="window.location.href='@Model.EditUrl'">
+            <span class="material-symbols-outlined" slot="icon">edit</span>
+        </md-text-button>
+    }
+    @if (!string.IsNullOrEmpty(Model.DeleteUrl))
+    {
+        <md-text-button title="Delete" onclick="window.location.href='@Model.DeleteUrl'">
+            <span class="material-symbols-outlined" slot="icon">delete</span>
+        </md-text-button>
+    }
+</div>

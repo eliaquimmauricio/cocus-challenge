@@ -1,0 +1,55 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div style="max-width: 800px; margin: 48px auto; text-align: center;">
+    <span class="material-symbols-outlined" style="font-size: 96px; color: var(--md-sys-color-error);">error</span>
+    
+    <h1 class="md-typescale-display-small text-error" style="margin: 24px 0 8px 0;">
+        Oops! Something went wrong
+    </h1>
+    <h2 class="md-typescale-headline-small text-error" style="margin: 0 0 32px 0;">
+        An error occurred while processing your request.
+    </h2>
+
+    @if (Model.ShowRequestId)
+    {
+        <div class="md-card" style="text-align: left; background-color: var(--md-sys-color-error-container);">
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                <span class="material-symbols-outlined" style="color: var(--md-sys-color-on-error-container);">info</span>
+                <strong class="md-typescale-title-medium" style="color: var(--md-sys-color-on-error-container);">Request ID:</strong>
+            </div>
+            <code class="md-typescale-body-medium" style="background-color: rgba(0,0,0,0.1); padding: 8px 12px; border-radius: 4px; display: block; color: var(--md-sys-color-on-error-container);">@Model.RequestId</code>
+        </div>
+    }
+
+    <div class="md-card" style="text-align: left; margin-top: 24px;">
+        <div style="display: flex; align-items: flex-start; gap: 16px;">
+            <span class="material-symbols-outlined" style="font-size: 32px; color: var(--md-sys-color-tertiary);">warning</span>
+            <div>
+                <h3 class="md-typescale-title-large" style="margin: 0 0 12px 0;">Development Mode</h3>
+                <p class="md-typescale-body-medium" style="color: var(--md-sys-color-on-surface-variant); margin-bottom: 12px;">
+                    Swapping to <strong>Development</strong> environment will display more detailed information about the error that occurred.
+                </p>
+                <p class="md-typescale-body-medium text-error" style="margin-bottom: 12px;">
+                    <strong>?? The Development environment shouldn't be enabled for deployed applications.</strong>
+                </p>
+                <p class="md-typescale-body-medium" style="color: var(--md-sys-color-on-surface-variant); margin: 0;">
+                    It can result in displaying sensitive information from exceptions to end users.
+                    For local debugging, enable the <strong>Development</strong> environment by setting the 
+                    <code style="background-color: var(--md-sys-color-surface-container); padding: 2px 6px; border-radius: 4px;">ASPNETCORE_ENVIRONMENT</code> 
+                    environment variable to <code style="background-color: var(--md-sys-color-surface-container); padding: 2px 6px; border-radius: 4px;">Development</code>
+                    and restarting the app.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 32px;">
+        <md-filled-button href="@Url.Action("Index", "Home")">
+            <span class="material-symbols-outlined" slot="icon">home</span>
+            Back to Home
+        </md-filled-button>
+    </div>
+</div>

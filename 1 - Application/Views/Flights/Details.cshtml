@@ -1,0 +1,154 @@
+@model Cocus.Domain.DTOs.FlightDto
+
+@{
+    ViewData["Title"] = "Flight Details";
+}
+
+<div class="page-header">
+    <h1 class="md-typescale-headline-large">
+        <span class="material-symbols-outlined title-icon">flight</span>
+        Flight Details
+    </h1>
+</div>
+
+<div class="details-grid">
+    <!-- Flight Overview Card -->
+    <div class="md-card">
+        <div class="card-header bg-primary-container">
+            <h2 class="md-typescale-headline-small on-primary-container">
+                Flight @Model.FlightNumber
+            </h2>
+            <p class="mt-8 on-primary-container">
+                <span class="badge bg-surface">
+                    @Model.Status
+                </span>
+            </p>
+        </div>
+        
+        <div class="details-overview">
+            <div class="details-location">
+                <span class="material-symbols-outlined location-icon">flight_takeoff</span>
+                <h3 class="md-typescale-title-large location-code">@Model.DepartureAirport?.Code</h3>
+                <p class="md-typescale-body-medium location-name">@Model.DepartureAirport?.Name</p>
+                <p class="md-typescale-body-small location-city">@Model.DepartureAirport?.City, @Model.DepartureAirport?.Country</p>
+            </div>
+            
+            <div class="details-separator">
+                <span class="material-symbols-outlined separator-icon">arrow_forward</span>
+                <p class="md-typescale-body-small separator-text">@Model.DistanceKm.ToString("N2") km</p>
+            </div>
+            
+            <div class="details-location">
+                <span class="material-symbols-outlined location-icon">flight_land</span>
+                <h3 class="md-typescale-title-large location-code">@Model.DestinationAirport?.Code</h3>
+                <p class="md-typescale-body-medium location-name">@Model.DestinationAirport?.Name</p>
+                <p class="md-typescale-body-small location-city">@Model.DestinationAirport?.City, @Model.DestinationAirport?.Country</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule Information -->
+    <div class="md-card">
+        <div class="card-header">
+            <h3 class="md-typescale-title-large">
+                <span class="material-symbols-outlined">schedule</span>
+                Schedule Information
+            </h3>
+        </div>
+        <div class="card-body">
+            <dl class="details-list">
+                <dt>Scheduled Departure:</dt>
+                <dd>@Model.ScheduledDeparture.ToString("yyyy-MM-dd HH:mm")</dd>
+
+                @if (Model.ActualDeparture.HasValue)
+                {
+                    <dt>Actual Departure:</dt>
+                    <dd>@Model.ActualDeparture.Value.ToString("yyyy-MM-dd HH:mm")</dd>
+                }
+
+                @if (Model.ActualArrival.HasValue)
+                {
+                    <dt>Actual Arrival:</dt>
+                    <dd>@Model.ActualArrival.Value.ToString("yyyy-MM-dd HH:mm")</dd>
+                }
+
+                <dt>Estimated Flight Time:</dt>
+                <dd>@Model.EstimatedFlightTimeHours.ToString("F2") hours</dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- Aircraft Information -->
+    <div class="md-card">
+        <div class="card-header">
+            <h3 class="md-typescale-title-large">
+                <span class="material-symbols-outlined">airlines</span>
+                Aircraft Information
+            </h3>
+        </div>
+        <div class="card-body">
+            <dl class="details-list">
+                <dt>Aircraft:</dt>
+                <dd>@Model.Aircraft?.Manufacturer @Model.Aircraft?.Model</dd>
+
+                <dt>Registration:</dt>
+                <dd><strong>@Model.Aircraft?.RegistrationNumber</strong></dd>
+
+                <dt>Cruise Speed:</dt>
+                <dd>@Model.Aircraft?.CruiseSpeedKmh.ToString("N0") km/h</dd>
+
+                <dt>Fuel Consumption:</dt>
+                <dd>@Model.Aircraft?.FuelConsumptionPerKm.ToString("F2") L/km</dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- Calculated Flight Metrics -->
+    <div class="md-card bg-tertiary-container">
+        <div class="card-header">
+            <h3 class="md-typescale-title-large on-tertiary-container">
+                <span class="material-symbols-outlined">calculate</span>
+                Calculated Metrics
+            </h3>
+        </div>
+        <div class="card-body bg-surface">
+            <div class="metrics-display">
+                <div class="metric-display">
+                    <span class="material-symbols-outlined metric-display-icon">straighten</span>
+                    <p class="md-typescale-title-large metric-display-value">@Model.DistanceKm.ToString("N2")</p>
+                    <p class="md-typescale-body-small metric-display-label">Distance (km)</p>
+                </div>
+
+                <div class="metric-display">
+                    <span class="material-symbols-outlined metric-display-icon">schedule</span>
+                    <p class="md-typescale-title-large metric-display-value">@Model.EstimatedFlightTimeHours.ToString("F2")</p>
+                    <p class="md-typescale-body-small metric-display-label">Flight Time (hours)</p>
+                </div>
+
+                <div class="metric-display">
+                    <span class="material-symbols-outlined metric-display-icon">local_gas_station</span>
+                    <p class="md-typescale-title-large metric-display-value">@Model.FuelRequiredLiters.ToString("N2")</p>
+                    <p class="md-typescale-body-small metric-display-label">Fuel Required (L)</p>
+                </div>
+            </div>
+            
+            <div class="alert alert-info mt-16">
+                <span class="material-symbols-outlined alert-icon">info</span>
+                <p class="md-typescale-body-small">
+                    Fuel calculation includes @Model.Aircraft?.TakeoffFuelEffort.ToString("N0") L takeoff effort plus @Model.Aircraft?.FuelConsumptionPerKm.ToString("F2") L/km for cruise.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="flex flex-gap-16 mt-24">
+    <md-filled-button onclick="window.location.href='@Url.Action("Edit", new { id = Model.Id })'">
+        <span class="material-symbols-outlined" slot="icon">edit</span>
+        Edit Flight
+    </md-filled-button>
+    <md-outlined-button onclick="window.location.href='@Url.Action("Index")'">
+        <span class="material-symbols-outlined" slot="icon">arrow_back</span>
+        Back to List
+    </md-outlined-button>
+</div>

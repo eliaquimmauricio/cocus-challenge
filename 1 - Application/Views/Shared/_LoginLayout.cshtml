@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Cocus.Mvc</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">    
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    
+    <script type="importmap">
+    @Html.Raw("{")
+        "imports": @Html.Raw("{")
+            "@@material/web/": "https://esm.run/@@material/web/"
+        @Html.Raw("}")
+    @Html.Raw("}")
+    </script>
+    <script type="module">
+        import '@@material/web/all.js';
+    </script>
+    
+    <link rel="stylesheet" href="~/css/material-theme.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/app.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Cocus.Mvc.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <main role="main" class="app-main">
+        @RenderBody()
+    </main>
+        
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

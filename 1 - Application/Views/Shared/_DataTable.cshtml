@@ -1,0 +1,46 @@
+@using Cocus.Domain.ViewModels
+@using System.Linq
+@model TableViewModel
+
+@if (Model.Rows.Count() > 0)
+{
+    <table class="data-table">
+        <thead>
+            <tr>
+                @foreach (var header in Model.Headers)
+                {
+                    <th>@header</th>
+                }
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in Model.Rows)
+            {
+                <tr>
+                    <td>
+                        <strong>@row.Values.First()</strong>
+                    </td>
+
+                    @foreach (var value in row.Values.Skip(1))
+                    {
+                        <td>
+                            @value
+                        </td>
+                    }
+                    
+                    @if (Model.ShowActions)
+                    {
+                        <td class="text-center">
+                            @await Html.PartialAsync("_TableActions", (Url.Action("Edit", new { id = row.Id }), Url.Action("Delete", new { id = row.Id })))
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    @await Html.PartialAsync("_TableEmpty", (Model.EmptyStateIcon, Model.EmptyStateMessage))
+}

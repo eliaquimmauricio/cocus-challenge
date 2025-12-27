@@ -1,0 +1,32 @@
+@using Cocus.Domain.ViewModels
+@using Cocus.Domain.DTOs
+@model IEnumerable<AirportDto>
+
+@{
+    ViewData["Title"] = "Airports";
+
+    TableViewModel tableModel = new TableViewModel
+    {
+        Headers = new List<string> { "Code", "Name", "City", "Country", "Coordinates" },
+        Rows = Model.Select(item => new TableRow
+        {
+            Id = item.Id,
+            Values = new List<string>
+            {
+                item.Code,
+                item.Name,
+                item.City,
+                item.Country,
+                $"{item.Latitude:F4}, {item.Longitude:F4}"
+            }
+        }),
+        ShowActions = true,
+        EmptyStateIcon = "connecting_airports",
+        EmptyStateMessage = "No airports found. Create one to get started."
+    };
+}
+
+<div class="md-card table-container">
+    @await Html.PartialAsync("_PageHeader", ("Airports", "Add New Airport", Url.Action("Create")))
+    @await Html.PartialAsync("_DataTable", tableModel)
+</div>

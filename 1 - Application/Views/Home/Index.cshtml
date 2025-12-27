@@ -1,0 +1,160 @@
+@model Cocus.Domain.DTOs.FlightReportDto
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="page-header">
+    <h1 class="md-typescale-headline-large">
+        <span class="material-symbols-outlined title-icon">analytics</span>
+        Flight Summary Report
+    </h1>
+    <p class="md-typescale-body-large text-muted mt-8">
+        Comprehensive overview of all flights with calculated metrics
+    </p>
+</div>
+
+<!-- Summary Cards -->
+<div class="metrics-grid mb-32">
+    <div class="md-card metric-card primary">
+        <span class="material-symbols-outlined metric-icon on-primary-container">flight</span>
+        <p class="md-typescale-headline-medium metric-value on-primary-container">@Model.TotalFlights</p>
+        <p class="md-typescale-body-medium metric-label on-primary-container">Total Flights</p>
+    </div>
+
+    <div class="md-card metric-card secondary">
+        <span class="material-symbols-outlined metric-icon on-secondary-container">straighten</span>
+        <p class="md-typescale-headline-medium metric-value on-secondary-container">@Model.TotalDistanceKm.ToString("N0")</p>
+        <p class="md-typescale-body-medium metric-label on-secondary-container">Total Distance (km)</p>
+    </div>
+
+    <div class="md-card metric-card tertiary">
+        <span class="material-symbols-outlined metric-icon on-tertiary-container">local_gas_station</span>
+        <p class="md-typescale-headline-medium metric-value on-tertiary-container">@Model.TotalFuelLiters.ToString("N0")</p>
+        <p class="md-typescale-body-medium metric-label on-tertiary-container">Total Fuel (L)</p>
+    </div>
+
+    <div class="md-card metric-card surface">
+        <span class="material-symbols-outlined metric-icon">schedule</span>
+        <p class="md-typescale-headline-medium metric-value">@Model.TotalFlightTimeHours.ToString("N1")</p>
+        <p class="md-typescale-body-medium metric-label text-muted">Total Flight Time (h)</p>
+    </div>
+</div>
+
+<!-- Average Statistics -->
+<div class="md-card mb-32 bg-surface">
+    <div class="card-header">
+        <h2 class="md-typescale-title-large">
+            <span class="material-symbols-outlined">avg_pace</span>
+            Average Statistics
+        </h2>
+    </div>
+    <div class="stats-grid">
+        <div class="stat-item">
+            <p class="md-typescale-body-small stat-label">Average Distance per Flight</p>
+            <p class="md-typescale-headline-small stat-value">@Model.AverageDistanceKm.ToString("N2") km</p>
+        </div>
+        <div class="stat-item">
+            <p class="md-typescale-body-small stat-label">Average Fuel per Flight</p>
+            <p class="md-typescale-headline-small stat-value">@Model.AverageFuelLiters.ToString("N2") L</p>
+        </div>
+    </div>
+</div>
+
+<!-- Detailed Flight List -->
+<div class="md-card">
+    <div class="card-header">
+        <h2 class="md-typescale-title-large">
+            <span class="material-symbols-outlined">list</span>
+            Flight Details
+        </h2>
+    </div>
+    
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Flight #</th>
+                    <th>Route</th>
+                    <th>Aircraft</th>
+                    <th>Departure</th>
+                    <th class="text-right">Distance (km)</th>
+                    <th class="text-right">Flight Time (h)</th>
+                    <th class="text-right">Fuel (L)</th>
+                    <th class="text-center">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var flight in Model.Flights)
+                {
+                    <tr>
+                        <td>
+                            <strong>@flight.FlightNumber</strong>
+                        </td>
+                        <td>
+                            <div>
+                                <strong>@flight.DepartureAirportCode</strong> ? <strong>@flight.DestinationAirportCode</strong>
+                            </div>
+                            <small class="text-muted">
+                                @flight.DepartureAirportName ? @flight.DestinationAirportName
+                            </small>
+                        </td>
+                        <td>
+                            @flight.AircraftModel
+                            <br />
+                            <small class="text-muted">
+                                @flight.AircraftRegistration
+                            </small>
+                        </td>
+                        <td>
+                            @flight.ScheduledDeparture.ToString("yyyy-MM-dd HH:mm")
+                        </td>
+                        <td class="text-right font-mono">
+                            @flight.DistanceKm.ToString("N2")
+                        </td>
+                        <td class="text-right font-mono">
+                            @flight.EstimatedFlightTimeHours.ToString("F2")
+                        </td>
+                        <td class="text-right font-mono">
+                            @flight.FuelRequiredLiters.ToString("N2")
+                        </td>
+                        <td class="text-center">
+                            <span class="badge">
+                                @flight.Status
+                            </span>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot style="background-color: var(--md-sys-color-surface-container-high); border-top: 2px solid var(--md-sys-color-outline);">
+                <tr>
+                    <td colspan="4" class="text-right font-medium">
+                        <strong>TOTALS:</strong>
+                    </td>
+                    <td class="text-right font-mono font-medium">
+                        @Model.TotalDistanceKm.ToString("N2")
+                    </td>
+                    <td class="text-right font-mono font-medium">
+                        @Model.TotalFlightTimeHours.ToString("F2")
+                    </td>
+                    <td class="text-right font-mono font-medium">
+                        @Model.TotalFuelLiters.ToString("N2")
+                    </td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        @if (!Model.Flights.Any())
+        {
+            <div class="table-empty">
+                <span class="material-symbols-outlined table-empty-icon">analytics</span>
+                <p class="md-typescale-body-large table-empty-text">No flight data available for reporting.</p>
+                <md-text-button onclick="window.location.href='@Url.Action("Create", "Flights")'" class="mt-16">
+                    <span class="material-symbols-outlined" slot="icon">add</span>
+                    Create Your First Flight
+                </md-text-button>
+            </div>
+        }
+    </div>
+</div>

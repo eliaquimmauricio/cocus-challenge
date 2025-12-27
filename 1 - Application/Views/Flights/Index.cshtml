@@ -1,0 +1,34 @@
+﻿@using Cocus.Domain.ViewModels
+@using Cocus.Domain.DTOs
+@model IEnumerable<FlightDto>
+
+@{
+    ViewData["Title"] = "Flights";
+
+    TableViewModel tableModel = new TableViewModel
+    {
+        Headers = new List<string> { "Flight #", "Route", "Aircraft", "Scheduled Departure", "Distance", "Fuel Required", "Status" },
+        Rows = Model.Select(item => new TableRow
+        {
+            Id = item.Id,
+            Values = new List<string>
+            {
+                item.FlightNumber,
+                $"{item.DepartureAirport?.Code} → {item.DestinationAirport?.Code}",
+                $"{item.Aircraft?.Model} {item.Aircraft?.RegistrationNumber}",
+                item.ScheduledDeparture.ToString("yyyy-MM-dd HH:mm"),
+                $"{item.DistanceKm:N2} km {item.EstimatedFlightTimeHours:F2} hrs ",
+                $"{item.FuelRequiredLiters:N2} L",
+                item.Status.ToString()
+            }
+        }),
+        ShowActions = true,
+        EmptyStateIcon = "flight_takeoff",
+        EmptyStateMessage = "No flights found. Create one to get started."
+    };
+}
+
+<div class="md-card table-container">
+    @await Html.PartialAsync("_PageHeader", ("Flights", "Add New Flight", Url.Action("Create")))
+    @await Html.PartialAsync("_DataTable", tableModel)
+</div>

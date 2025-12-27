@@ -1,0 +1,15 @@
+@model (string Title, string ActionText, string ActionUrl)
+
+<div class="page-header">
+    <div class="page-title">
+        <h1>
+            @Model.Title
+        </h1>
+        @if (!string.IsNullOrEmpty(Model.ActionText) && !string.IsNullOrEmpty(Model.ActionUrl))
+        {
+            <md-filled-button onclick="window.location.href='@Model.ActionUrl'">
+                @Model.ActionText
+            </md-filled-button>
+        }
+    </div>
+</div>

@@ -1,0 +1,120 @@
+@model Cocus.Domain.DTOs.FlightDto
+
+@{
+    ViewData["Title"] = "Edit Flight";
+}
+
+<div class="md-card form-container">
+    <div class="page-header">
+        <h1>
+            Edit Flight
+        </h1>
+    </div>
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="CreatedAt" />
+        
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-error mb-16">
+                <div asp-validation-summary="ModelOnly" class="text-error"></div>
+            </div>
+        }
+        
+        <div class="form-grid">
+            <div class="form-row">
+                <div class="form-group">
+                    <label asp-for="FlightNumber" class="md-typescale-body-large form-label">
+                        Flight Number
+                    </label>
+                    <input asp-for="FlightNumber" class="md-typescale-body-medium form-input" />
+                    <span asp-validation-for="FlightNumber" class="form-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ScheduledDeparture" class="md-typescale-body-large form-label">
+                        Scheduled Departure
+                    </label>
+                    <input asp-for="ScheduledDeparture" type="datetime-local" class="md-typescale-body-medium form-input" />
+                    <span asp-validation-for="ScheduledDeparture" class="form-error"></span>
+                </div>
+            </div>
+
+            <div class="form-section form-section-surface">
+                <h3 class="md-typescale-title-medium form-section-title">
+                    <span class="material-symbols-outlined">route</span>
+                    Route Information
+                </h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="DepartureAirportId" class="md-typescale-body-large form-label">
+                            Departure Airport
+                        </label>
+                        <select asp-for="DepartureAirportId" asp-items="ViewBag.Airports" class="md-typescale-body-medium form-select">
+                            <option value="">-- Select Departure Airport --</option>
+                        </select>
+                        <span asp-validation-for="DepartureAirportId" class="form-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="DestinationAirportId" class="md-typescale-body-large form-label">
+                            Destination Airport
+                        </label>
+                        <select asp-for="DestinationAirportId" asp-items="ViewBag.DestinationAirports" class="md-typescale-body-medium form-select">
+                            <option value="">-- Select Destination Airport --</option>
+                        </select>
+                        <span asp-validation-for="DestinationAirportId" class="form-error"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section form-section-surface">
+                <h3 class="md-typescale-title-medium form-section-title">
+                    <span class="material-symbols-outlined">airlines</span>
+                    Aircraft & Status
+                </h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="AircraftId" class="md-typescale-body-large form-label">
+                            Aircraft
+                        </label>
+                        <select asp-for="AircraftId" asp-items="ViewBag.Aircraft" class="md-typescale-body-medium form-select">
+                            <option value="">-- Select Aircraft --</option>
+                        </select>
+                        <span asp-validation-for="AircraftId" class="form-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Status" class="md-typescale-body-large form-label">
+                            Flight Status
+                        </label>
+                        <select asp-for="Status" class="md-typescale-body-medium form-select">
+                            <option value="0">Scheduled</option>
+                            <option value="1">Boarding</option>
+                            <option value="2">Departed</option>
+                            <option value="3">In Flight</option>
+                            <option value="4">Landed</option>
+                            <option value="5">Cancelled</option>
+                        </select>
+                        <span asp-validation-for="Status" class="form-error"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <md-filled-button type="button" onclick="this.closest('form').submit()">
+                Save Changes
+            </md-filled-button>
+            <md-outlined-button type="button" onclick="window.location.href='@Url.Action("Index")'">
+                Cancel
+            </md-outlined-button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

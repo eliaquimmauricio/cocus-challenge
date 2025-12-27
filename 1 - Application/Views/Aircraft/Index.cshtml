@@ -1,0 +1,33 @@
+@using Cocus.Domain.ViewModels
+@using Cocus.Domain.DTOs
+@model IEnumerable<AircraftDto>
+
+@{
+    ViewData["Title"] = "Aircraft";
+
+    TableViewModel tableModel = new TableViewModel
+    {
+        Headers = new List<string> { "Registration", "Model", "Manufacturer", "Fuel Consumption", "Max Range", "Cruise Speed" },
+        Rows = Model.Select(item => new TableRow
+        {
+            Id = item.Id,
+            Values = new List<string>
+            {
+                item.RegistrationNumber,
+                item.Model,
+                item.Manufacturer,
+                $"{item.FuelConsumptionPerKm:F2} L/km Takeoff: {item.TakeoffFuelEffort:F0} L",
+                $"{item.MaxRangeKm:N0} km",
+                $"{item.CruiseSpeedKmh:N0} km/h"
+            }
+        }),
+        ShowActions = true,
+        EmptyStateIcon = "airlines",
+        EmptyStateMessage = "No aircraft found. Create one to get started."
+    };
+}
+
+<div class="md-card table-container">
+    @await Html.PartialAsync("_PageHeader", ("Aircraft", "Add New Aircraft", Url.Action("Create")))
+    @await Html.PartialAsync("_DataTable", tableModel)
+</div>

@@ -1,0 +1,44 @@
+@model Cocus.Domain.DTOs.AirportDto
+
+@{
+    ViewData["Title"] = "Delete Airport";
+}
+
+<div class="md-card ">
+    <div class="card-header">
+        <p class="md-typescale-title-large on-error-container">
+            Are you sure you want to delete this airport?
+        </p>
+    </div>
+    
+    <div class="card-body bg-surface">
+        <dl class="details-list">
+            <dt>Airport Code:</dt>
+            <dd><strong>@Model.Code</strong></dd>
+
+            <dt>Name:</dt>
+            <dd>@Model.Name</dd>
+
+            <dt>Location:</dt>
+            <dd>@Model.City, @Model.Country</dd>
+
+            <dt>Coordinates:</dt>
+            <dd>@Model.Latitude.ToString("F4"), @Model.Longitude.ToString("F4")</dd>
+
+            <dt>Created:</dt>
+            <dd>@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</dd>
+        </dl>
+    </div>
+
+    <form asp-action="Delete" method="post" class="card-footer bg-surface">
+        <input type="hidden" asp-for="Id" />
+        <div class="flex flex-gap-16">
+            <md-filled-button onclick="this.closest('form').submit()">
+                Confirm Delete
+            </md-filled-button>
+            <md-outlined-button type="button" onclick="window.location.href='@Url.Action("Index")'">
+                Cancel
+            </md-outlined-button>
+        </div>
+    </form>
+</div>
