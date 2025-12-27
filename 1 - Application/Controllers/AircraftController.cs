@@ -18,21 +18,13 @@ public class AircraftController : Controller
 	public async Task<IActionResult> Index()
 	{
 		var aircraft = await _aircraftService.GetAllAsync();
+
 		return View(aircraft);
 	}
 
 	public async Task<IActionResult> Details(int? id)
 	{
-		if (id == null)
-		{
-			return NotFound();
-		}
-
 		var aircraft = await _aircraftService.GetByIdAsync(id.Value);
-		if (aircraft == null)
-		{
-			return NotFound();
-		}
 
 		return View(aircraft);
 	}
@@ -42,13 +34,13 @@ public class AircraftController : Controller
 		return View();
 	}
 
-	[HttpPost]
-	[ValidateAntiForgeryToken]
+	[HttpPost, ValidateAntiForgeryToken]
 	public async Task<IActionResult> Create(AircraftDto aircraftDto)
 	{
 		if (ModelState.IsValid)
 		{
 			var validationError = await _aircraftService.ValidateAircraftAsync(aircraftDto);
+
 			if (validationError != null)
 			{
 				ModelState.AddModelError("", validationError);
@@ -69,30 +61,16 @@ public class AircraftController : Controller
 		return View(aircraftDto);
 	}
 
-	public async Task<IActionResult> Edit(int? id)
+	public async Task<IActionResult> Edit(int id)
 	{
-		if (id == null)
-		{
-			return NotFound();
-		}
+		var aircraft = await _aircraftService.GetByIdAsync(id);
 
-		var aircraft = await _aircraftService.GetByIdAsync(id.Value);
-		if (aircraft == null)
-		{
-			return NotFound();
-		}
 		return View(aircraft);
 	}
 
-	[HttpPost]
-	[ValidateAntiForgeryToken]
+	[HttpPost, ValidateAntiForgeryToken]
 	public async Task<IActionResult> Edit(int id, AircraftDto aircraftDto)
 	{
-		if (id != aircraftDto.Id)
-		{
-			return NotFound();
-		}
-
 		if (ModelState.IsValid)
 		{
 			var validationError = await _aircraftService.ValidateAircraftAsync(aircraftDto);
@@ -113,32 +91,24 @@ public class AircraftController : Controller
 				ModelState.AddModelError("", $"Error updating aircraft: {ex.Message}");
 			}
 		}
+
 		return View(aircraftDto);
 	}
 
 	public async Task<IActionResult> Delete(int? id)
 	{
-		if (id == null)
-		{
-			return NotFound();
-		}
-
 		var aircraft = await _aircraftService.GetByIdAsync(id.Value);
-		if (aircraft == null)
-		{
-			return NotFound();
-		}
 
 		return View(aircraft);
 	}
 
-	[HttpPost, ActionName("Delete")]
-	[ValidateAntiForgeryToken]
+	[HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
 	public async Task<IActionResult> DeleteConfirmed(int id)
 	{
 		try
 		{
 			await _aircraftService.DeleteAsync(id);
+
 			TempData["SuccessMessage"] = "Aircraft deleted successfully.";
 		}
 		catch (Exception ex)

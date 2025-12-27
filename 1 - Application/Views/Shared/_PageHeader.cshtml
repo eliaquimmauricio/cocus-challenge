@@ -1,6 +1,22 @@
 @model (string Title, string ActionText, string ActionUrl)
 
 <div class="page-header">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            <span class="material-symbols-outlined alert-icon">check_circle</span>
+            <span>@TempData["SuccessMessage"]</span>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-error">
+            <span class="material-symbols-outlined alert-icon">error</span>
+            <span>@TempData["ErrorMessage"]</span>
+        </div>
+    }
+
     <div class="page-title">
         <h1>
             @Model.Title

@@ -50,7 +50,22 @@ public class Repository<T> : IRepository<T> where T : class
 		if (entity != null)
 		{
 			_dbSet.Remove(entity);
-			await _context.SaveChangesAsync();
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateException ex)
+			{
+				// Check if it's a foreign key constraint violation
+				if (ex.InnerException?.Message.Contains("REFERENCE constraint") == true ||
+					ex.InnerException?.Message.Contains("FK_") == true)
+				{
+					throw new InvalidOperationException(
+						"Cannot delete this record because it is referenced by other records. " +
+						"Please remove all related records first.", ex);
+				}
+				throw;
+			}
 		}
 	}
 

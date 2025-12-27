@@ -8,10 +8,12 @@ namespace Cocus.Domain.Services;
 public class AircraftService : IAircraftService
 {
 	private readonly IAircraftRepository _aircraftRepository;
+	private readonly IFlightRepository _flightRepository;
 
-	public AircraftService(IAircraftRepository aircraftRepository)
+	public AircraftService(IAircraftRepository aircraftRepository, IFlightRepository flightRepository)
 	{
 		_aircraftRepository = aircraftRepository;
+		_flightRepository = flightRepository;
 	}
 
 	public async Task<AircraftDto?> GetByIdAsync(int id)
@@ -61,6 +63,15 @@ public class AircraftService : IAircraftService
 
 	public async Task DeleteAsync(int id)
 	{
+		// Check if aircraft has any flights
+		var flights = await _flightRepository.GetFlightsByAircraftAsync(id);
+		if (flights.Any())
+		{
+			throw new InvalidOperationException(
+				$"Cannot delete this aircraft because it has {flights.Count()} associated flight(s). " +
+				"Please delete or reassign all flights before deleting the aircraft.");
+		}
+
 		await _aircraftRepository.DeleteAsync(id);
 	}
 

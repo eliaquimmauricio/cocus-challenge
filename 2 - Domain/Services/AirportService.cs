@@ -8,10 +8,12 @@ namespace Cocus.Domain.Services;
 public class AirportService : IAirportService
 {
 	private readonly IAirportRepository _airportRepository;
+	private readonly IFlightRepository _flightRepository;
 
-	public AirportService(IAirportRepository airportRepository)
+	public AirportService(IAirportRepository airportRepository, IFlightRepository flightRepository)
 	{
 		_airportRepository = airportRepository;
+		_flightRepository = flightRepository;
 	}
 
 	public async Task<AirportDto?> GetByIdAsync(int id)
@@ -60,6 +62,15 @@ public class AirportService : IAirportService
 
 	public async Task DeleteAsync(int id)
 	{
+		// Check if airport has any flights
+		var flights = await _flightRepository.GetFlightsByAirportAsync(id);
+		if (flights.Any())
+		{
+			throw new InvalidOperationException(
+				$"Cannot delete this airport because it has {flights.Count()} associated flight(s). " +
+				"Please delete or reassign all flights before deleting the airport.");
+		}
+
 		await _airportRepository.DeleteAsync(id);
 	}
 
