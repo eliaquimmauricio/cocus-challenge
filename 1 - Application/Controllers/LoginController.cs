@@ -10,9 +10,8 @@ namespace Cocus.Mvc.Controllers
         public IActionResult Index()
         {
             if (User.Identity?.IsAuthenticated == true)
-            {
                 return RedirectToAction("Index", "Home");
-            }
+
             return View();
         }
 
@@ -23,6 +22,7 @@ namespace Cocus.Mvc.Controllers
             {
                 RedirectUri = Url.Action("GoogleResponse", new { returnUrl })
             };
+
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
 
@@ -31,14 +31,10 @@ namespace Cocus.Mvc.Controllers
             var result = await HttpContext.AuthenticateAsync();
             
             if (!result.Succeeded)
-            {
                 return RedirectToAction("Index");
-            }
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
-            {
                 return Redirect(returnUrl);
-            }
 
             return RedirectToAction("Index", "Home");
         }
@@ -47,6 +43,7 @@ namespace Cocus.Mvc.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
+
             return RedirectToAction("Index", "Login");
         }
     }

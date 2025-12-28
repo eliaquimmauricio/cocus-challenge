@@ -18,21 +18,16 @@ public class AirportsController : Controller
 	public async Task<IActionResult> Index()
 	{
 		var airports = await _airportService.GetAllAsync();
+
 		return View(airports);
 	}
 
-	public async Task<IActionResult> Details(int? id)
+	public async Task<IActionResult> Details(int id)
 	{
-		if (id == null)
-		{
-			return NotFound();
-		}
-
-		var airport = await _airportService.GetByIdAsync(id.Value);
+		var airport = await _airportService.GetByIdAsync(id);
+		
 		if (airport == null)
-		{
 			return NotFound();
-		}
 
 		return View(airport);
 	}
@@ -49,6 +44,7 @@ public class AirportsController : Controller
 		if (ModelState.IsValid)
 		{
 			var validationError = await _airportService.ValidateAirportAsync(airportDto);
+
 			if (validationError != null)
 			{
 				ModelState.AddModelError("Code", validationError);
@@ -66,21 +62,17 @@ public class AirportsController : Controller
 				ModelState.AddModelError("", $"Error creating airport: {ex.Message}");
 			}
 		}
+
 		return View(airportDto);
 	}
 
-	public async Task<IActionResult> Edit(int? id)
+	public async Task<IActionResult> Edit(int id)
 	{
-		if (id == null)
-		{
-			return NotFound();
-		}
+		var airport = await _airportService.GetByIdAsync(id);
 
-		var airport = await _airportService.GetByIdAsync(id.Value);
 		if (airport == null)
-		{
 			return NotFound();
-		}
+
 		return View(airport);
 	}
 
@@ -89,13 +81,12 @@ public class AirportsController : Controller
 	public async Task<IActionResult> Edit(int id, AirportDto airportDto)
 	{
 		if (id != airportDto.Id)
-		{
 			return NotFound();
-		}
 
 		if (ModelState.IsValid)
 		{
 			var validationError = await _airportService.ValidateAirportAsync(airportDto);
+
 			if (validationError != null)
 			{
 				ModelState.AddModelError("Code", validationError);
@@ -113,32 +104,27 @@ public class AirportsController : Controller
 				ModelState.AddModelError("", $"Error updating airport: {ex.Message}");
 			}
 		}
+
 		return View(airportDto);
 	}
 
-	public async Task<IActionResult> Delete(int? id)
+	public async Task<IActionResult> Delete(int id)
 	{
-		if (id == null)
-		{
-			return NotFound();
-		}
+		var airport = await _airportService.GetByIdAsync(id);
 
-		var airport = await _airportService.GetByIdAsync(id.Value);
 		if (airport == null)
-		{
 			return NotFound();
-		}
 
 		return View(airport);
 	}
 
-	[HttpPost, ActionName("Delete")]
-	[ValidateAntiForgeryToken]
+	[HttpPost, ActionName("Delete"), ValidateAntiForgeryToken]
 	public async Task<IActionResult> DeleteConfirmed(int id)
 	{
 		try
 		{
 			await _airportService.DeleteAsync(id);
+
 			TempData["SuccessMessage"] = "Airport deleted successfully.";
 		}
 		catch (Exception ex)
