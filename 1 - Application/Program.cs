@@ -3,6 +3,7 @@ using Cocus.Domain.Interfaces.Repositories;
 using Cocus.Domain.Services;
 using Cocus.Infra.Data.Context;
 using Cocus.Infra.Data.Repositories;
+using Cocus.Infra.Data.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -47,6 +48,11 @@ using (var scope = app.Services.CreateScope())
 {
 	var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 	dbContext.Database.Migrate();
+	
+	bool enableSeeder = builder.Configuration.GetValue<bool>("DbSeeder:Enabled");
+
+	if (enableSeeder)
+		DatabaseSeeder.Seed(dbContext);
 }
 
 if (!app.Environment.IsDevelopment())
