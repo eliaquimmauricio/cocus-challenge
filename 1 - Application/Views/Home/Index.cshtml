@@ -1,7 +1,30 @@
+﻿@using Cocus.Domain.ViewModels
 @model Cocus.Domain.DTOs.FlightReportDto
 
 @{
     ViewData["Title"] = "Home Page";
+    
+    TableViewModel tableModel = new TableViewModel
+    {
+        Headers = new List<string> { "Flight #", "Route", "Aircraft", "Departure", "Distance (km)", "Flight Time (h)", "Fuel (L)", "Status" },
+        Rows = Model.Flights.Select(flight => new TableRow
+        {
+            Values = new List<string>
+            {
+                flight.FlightNumber,
+                $"{flight.DepartureAirportCode} → {flight.DestinationAirportCode}",
+                $"{flight.AircraftModel} {flight.AircraftRegistration}",
+                flight.ScheduledDeparture.ToString("yyyy-MM-dd HH:mm"),
+                flight.DistanceKm.ToString("N2"),
+                flight.EstimatedFlightTimeHours.ToString("F2"),
+                flight.FuelRequiredLiters.ToString("N2"),
+                flight.Status
+            }
+        }),
+        ShowActions = false,
+        EmptyStateIcon = "analytics",
+        EmptyStateMessage = "No flight data available for reporting."
+    };
 }
 
 <div class="md-card bg-surface">
@@ -49,7 +72,7 @@
     </div>
 </div>
 
-<div class="md-card">
+<div class="md-card table-container">
     <div class="card-header">
         <h2 class="md-typescale-title-large">
             <span class="material-symbols-outlined">list</span>
@@ -57,91 +80,5 @@
         </h2>
     </div>
     
-    <div class="table-container">
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>Flight #</th>
-                    <th>Route</th>
-                    <th>Aircraft</th>
-                    <th>Departure</th>
-                    <th class="text-right">Distance (km)</th>
-                    <th class="text-right">Flight Time (h)</th>
-                    <th class="text-right">Fuel (L)</th>
-                    <th class="text-center">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var flight in Model.Flights)
-                {
-                    <tr>
-                        <td>
-                            <strong>@flight.FlightNumber</strong>
-                        </td>
-                        <td>
-                            <div>
-                                <strong>@flight.DepartureAirportCode</strong> ? <strong>@flight.DestinationAirportCode</strong>
-                            </div>
-                            <small class="text-muted">
-                                @flight.DepartureAirportName ? @flight.DestinationAirportName
-                            </small>
-                        </td>
-                        <td>
-                            @flight.AircraftModel
-                            <br />
-                            <small class="text-muted">
-                                @flight.AircraftRegistration
-                            </small>
-                        </td>
-                        <td>
-                            @flight.ScheduledDeparture.ToString("yyyy-MM-dd HH:mm")
-                        </td>
-                        <td class="text-right font-mono">
-                            @flight.DistanceKm.ToString("N2")
-                        </td>
-                        <td class="text-right font-mono">
-                            @flight.EstimatedFlightTimeHours.ToString("F2")
-                        </td>
-                        <td class="text-right font-mono">
-                            @flight.FuelRequiredLiters.ToString("N2")
-                        </td>
-                        <td class="text-center">
-                            <span class="badge">
-                                @flight.Status
-                            </span>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-            <tfoot style="background-color: var(--md-sys-color-surface-container-high); border-top: 2px solid var(--md-sys-color-outline);">
-                <tr>
-                    <td colspan="4" class="text-right font-medium">
-                        <strong>TOTALS:</strong>
-                    </td>
-                    <td class="text-right font-mono font-medium">
-                        @Model.TotalDistanceKm.ToString("N2")
-                    </td>
-                    <td class="text-right font-mono font-medium">
-                        @Model.TotalFlightTimeHours.ToString("F2")
-                    </td>
-                    <td class="text-right font-mono font-medium">
-                        @Model.TotalFuelLiters.ToString("N2")
-                    </td>
-                    <td></td>
-                </tr>
-            </tfoot>
-        </table>
-        
-        @if (!Model.Flights.Any())
-        {
-            <div class="table-empty">
-                <span class="material-symbols-outlined table-empty-icon">analytics</span>
-                <p class="md-typescale-body-large table-empty-text">No flight data available for reporting.</p>
-                <md-text-button onclick="window.location.href='@Url.Action("Create", "Flights")'" class="mt-16">
-                    <span class="material-symbols-outlined" slot="icon">add</span>
-                    Create Your First Flight
-                </md-text-button>
-            </div>
-        }
-    </div>
+    @await Html.PartialAsync("_DataTable", tableModel)
 </div>
